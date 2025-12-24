@@ -12,11 +12,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // create a demo user for quick login
-        \App\Models\User::factory()->create([
-            'name' => 'Demo User',
-            'email' => 'demo@example.com',
-        ]);
+        // create or update user for the project owner
+        \App\Models\User::updateOrCreate(
+            ['email' => 'pccmuis77@gmail.com'],
+            [
+                'name' => 'Muis Nuryana',
+                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+                'email_verified_at' => now(),
+            ]
+        );
 
         // call task seeder to populate tasks + tags
         $this->call(TaskSeeder::class);
