@@ -30,6 +30,14 @@
                         </select>
                     </div>
 
+                    <div class="mb-3">
+                        <label for="tags" class="form-label">Tags (pisahkan dengan koma)</label>
+                        <input type="text" name="tags" class="form-control" value="" placeholder="eg. pekerjaan, penting">
+                        @if(isset($tags) && $tags->count())
+                            <small class="form-text text-muted">Tag yang tersedia: {{ $tags->pluck('name')->join(', ') }}</small>
+                        @endif
+                    </div>
+
                     <button type="submit" class="btn btn-success">Simpan</button>
                     <a href="{{ route('tasks.index') }}" class="btn btn-secondary">Batal</a>
                 </form>

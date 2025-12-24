@@ -21,6 +21,15 @@
                         </option>
                     </select>
 
+                    <select name="tag" class="form-control me-2">
+                        <option value="">Semua Tag</option>
+                        @if(isset($tags))
+                            @foreach($tags as $t)
+                                <option value="{{ $t->slug ?? $t->name }}" {{ request('tag') == ($t->slug ?? $t->name) ? 'selected' : '' }}>{{ $t->name }}</option>
+                            @endforeach
+                        @endif
+                    </select>
+
                     <button type="submit" class="btn btn-primary">Cari</button>
                 </form>
 
@@ -33,6 +42,7 @@
                         <tr>
                             <th>Judul</th>
                             <th>Deskripsi</th>
+                            <th>Tags</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
@@ -40,6 +50,11 @@
                     <tbody>
                         @foreach ($tasks as $task)
                             <tr>
+                                <td>
+                                    @foreach($task->tags as $tag)
+                                        <a href="{{ route('tasks.index', array_merge(request()->all(), ['tag' => $tag->slug ?? $tag->name])) }}" class="badge bg-secondary text-decoration-none">{{ $tag->name }}</a>
+                                    @endforeach
+                                </td>
                                 <td>{{ $task->title }}</td>
                                 <td>{{ $task->description }}</td>
                                 <td>
@@ -66,7 +81,7 @@
 
                 <!-- Pagination -->
                 <div class="mt-3">
-                    {{ $tasks->links() }}
+                    {{ $tasks->appends(request()->query())->links() }}
                 </div>
             </div>
         </div>
