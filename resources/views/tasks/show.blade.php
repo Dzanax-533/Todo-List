@@ -17,6 +17,14 @@
                     @endforeach
                 </p>
 
+                @if($task->due_date)
+                    <p><strong>Due:</strong> {{ $task->due_date->format('Y-m-d') }}</p>
+                @endif
+
+                @if($task->is_recurring && $task->recurrence)
+                    <p><strong>Recurring:</strong> {{ ucfirst($task->recurrence) }}</p>
+                @endif
+
                 <a href="{{ route('tasks.index') }}" class="btn btn-secondary">Kembali</a>
             </div>
         </div>

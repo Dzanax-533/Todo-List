@@ -10,15 +10,22 @@
             </div>
             <div class="card-body">
                 <!-- Form Pencarian & Filter -->
-                <form action="{{ route('tasks.index') }}" method="GET" class="mb-3 d-flex">
+                <form action="{{ route('tasks.index') }}" method="GET" class="mb-3 d-flex flex-wrap gap-2 align-items-start">
                     <input type="text" name="search" class="form-control me-2" placeholder="Cari tugas..."
-                        value="{{ request('search') }}">
+                        value="{{ request('search') }}" style="min-width:220px;">
 
                     <select name="filter" class="form-control me-2">
                         <option value="">Semua</option>
                         <option value="completed" {{ request('filter') == 'completed' ? 'selected' : '' }}>Selesai</option>
                         <option value="pending" {{ request('filter') == 'pending' ? 'selected' : '' }}>Belum Selesai
                         </option>
+                    </select>
+
+                    <select name="due" class="form-control me-2">
+                        <option value="">Semua Tanggal</option>
+                        <option value="overdue" {{ request('due') == 'overdue' ? 'selected' : '' }}>Overdue</option>
+                        <option value="today" {{ request('due') == 'today' ? 'selected' : '' }}>Hari Ini</option>
+                        <option value="upcoming" {{ request('due') == 'upcoming' ? 'selected' : '' }}>Akan Datang</option>
                     </select>
 
                     <select name="tag" class="form-control me-2">
@@ -30,7 +37,8 @@
                         @endif
                     </select>
 
-                    <button type="submit" class="btn btn-primary">Cari</button>
+                    <button type="submit" class="btn btn-primary me-2">Cari</button>
+                    <a href="{{ route('tasks.index') }}" class="btn btn-outline-secondary">Reset</a>
                 </form>
 
                 <!-- Tombol Tambah -->
@@ -41,22 +49,41 @@
                     <thead class="table-light">
                         <tr>
                             <th>Judul</th>
-                            <th>Deskripsi</th>
                             <th>Tags</th>
+                            <th>Deskripsi</th>
+                            <th>Due</th>
+                            <th>Recurrence</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($tasks as $task)
-                            <tr>
+                            @php
+                                $isOverdue = $task->due_date && $task->due_date->isPast() && !$task->is_completed;
+                            @endphp
+                            <tr class="{{ $isOverdue ? 'table-danger' : '' }}">
+                                <td>{{ $task->title }}</td>
                                 <td>
                                     @foreach($task->tags as $tag)
                                         <a href="{{ route('tasks.index', array_merge(request()->all(), ['tag' => $tag->slug ?? $tag->name])) }}" class="badge bg-secondary text-decoration-none">{{ $tag->name }}</a>
                                     @endforeach
                                 </td>
-                                <td>{{ $task->title }}</td>
-                                <td>{{ $task->description }}</td>
+                                <td>{{ \Illuminate\Support\Str::limit($task->description, 80) }}</td>
+                                <td>
+                                    @if($task->due_date)
+                                        <span class="badge {{ $isOverdue ? 'bg-danger' : ($task->due_date->isToday() ? 'bg-success' : 'bg-secondary') }}">{{ $task->due_date->format('Y-m-d') }}</span>
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($task->is_recurring && $task->recurrence)
+                                        <span class="badge bg-info">{{ ucfirst($task->recurrence) }}</span>
+                                    @else
+                                        -
+                                    @endif
+                                </td>
                                 <td>
                                     @if ($task->is_completed)
                                         <span class="badge bg-success">Selesai</span>

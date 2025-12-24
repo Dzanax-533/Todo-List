@@ -14,6 +14,15 @@ class Task extends Model
         'title',
         'description',
         'is_completed',
+        'due_date',
+        'is_recurring',
+        'recurrence',
+    ];
+
+    protected $casts = [
+        'is_completed' => 'boolean',
+        'is_recurring' => 'boolean',
+        'due_date' => 'date',
     ];
 
     /**

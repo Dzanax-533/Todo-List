@@ -6,3 +6,23 @@
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
+
+// Custom task list styles
+.task-overdue {
+  border-left: 4px solid #dc3545;
+}
+
+.badge-due {
+  font-weight: 600;
+}
+
+.badge-due--overdue {
+  background-color: #dc3545 !important;
+  color: #fff !important;
+}
+
+.badge-due--today {
+  background-color: #198754 !important;
+  color: #fff !important;
+}
+

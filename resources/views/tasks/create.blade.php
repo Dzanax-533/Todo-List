@@ -38,6 +38,26 @@
                         @endif
                     </div>
 
+                    <div class="mb-3">
+                        <label for="due_date" class="form-label">Due date</label>
+                        <input type="date" name="due_date" class="form-control" value="">
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="is_recurring" value="1" class="form-check-input" id="is_recurring">
+                        <label class="form-check-label" for="is_recurring">Recurring</label>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="recurrence" class="form-label">Recurrence</label>
+                        <select name="recurrence" class="form-control">
+                            <option value="">-- Pilih --</option>
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+
                     <button type="submit" class="btn btn-success">Simpan</button>
                     <a href="{{ route('tasks.index') }}" class="btn btn-secondary">Batal</a>
                 </form>

@@ -39,6 +39,26 @@
                         @endif
                     </div>
 
+                    <div class="mb-3">
+                        <label for="due_date" class="form-label">Due date</label>
+                        <input type="date" name="due_date" class="form-control" value="{{ optional($task->due_date)->format('Y-m-d') }}">
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="is_recurring" value="1" class="form-check-input" id="is_recurring" {{ $task->is_recurring ? 'checked' : '' }}>
+                        <label class="form-check-label" for="is_recurring">Recurring</label>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="recurrence" class="form-label">Recurrence</label>
+                        <select name="recurrence" class="form-control">
+                            <option value="">-- Pilih --</option>
+                            <option value="daily" {{ $task->recurrence === 'daily' ? 'selected' : '' }}>Daily</option>
+                            <option value="weekly" {{ $task->recurrence === 'weekly' ? 'selected' : '' }}>Weekly</option>
+                            <option value="monthly" {{ $task->recurrence === 'monthly' ? 'selected' : '' }}>Monthly</option>
+                        </select>
+                    </div>
+
                     <button type="submit" class="btn btn-primary">Perbarui</button>
                     <a href="{{ route('tasks.index') }}" class="btn btn-secondary">Batal</a>
                 </form>
